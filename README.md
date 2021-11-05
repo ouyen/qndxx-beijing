@@ -25,3 +25,9 @@
 
 1. Use requests to login.
 2. Add mail support.
+
+## Back up plan
+
+In general, it is always possible to go through the normal process in selenium headless mode, but the current method is feasible, so I will not continue to develop it now.
+
+## TAKE YOUR OWN RISK!!!
