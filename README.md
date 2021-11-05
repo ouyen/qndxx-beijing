@@ -1,4 +1,4 @@
-# Automatic completion the QNDXXX in Beijing
+# Automatic completion the QNDXX in Beijing
 
 ## Instructions
 
