@@ -3,7 +3,7 @@
 ## Instructions
 
 1. Copy config.example.json to config.json
-2. Install[python](https://www.python.org/),[GeckoDriver](https://zhuanlan.zhihu.com/p/33746273),run ``pip3 install -r requirements.txt`` to install requirements.
+2. Install [python](https://www.python.org/) , [GeckoDriver](https://zhuanlan.zhihu.com/p/33746273) , run ``pip3 install -r requirements.txt`` to install requirements.
 3. Edit config.json. (Enter this [website](https://m.bjyouth.net/site/login) to retrieve the account and password)
 ```
 {
