@@ -17,6 +17,9 @@ class QNDXX_NEW_COURSE():
         self.url = "https://h5.cyol.com/special/daxuexi/byw1m1kn1s/m.html?t=1&z=201",
         self.org_id = 172440  #"北京市东城团区委"
         self.end_img_url = 'https://h5.cyol.com/special/daxuexi/byw1m1kn1s/images/end.jpg'  #example
+        self.study_url= "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
+            self.id, self.org_id
+            )
 
     def update(self, headers):
         try:
@@ -31,6 +34,9 @@ class QNDXX_NEW_COURSE():
             self.org_id = index['rank'][0]['data'][1]['org_id']
             i = self.url.find("/m.html")
             self.end_img_url = self.url[:i] + '/images/end.jpg'
+            self.study_url= "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
+                self.id, self.org_id
+                )
             print('update success')
             return 1
         except:
@@ -109,22 +115,22 @@ class QNDXX():
         self.password = config['password']
         self.send_message_url = config['message_url']
 
-    def study_dxx(self):
-        url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
-            self.course.id, self.course.org_id)
+    def learn_dxx(self):
+        # url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
+        #     self.course.id, self.course.org_id)
         try:
-            r = requests.get(url, self.headers, timeout=5)
+            r = requests.get(self.course.study_url, self.headers, timeout=5)
             r.status_code
-            print('study complete')
-            message = "id=%s,%s学习完毕\n结束图片链接：\n%s" % (
-                self.course.id, self.course.title, self.course.end_img_url)
+            print('learn complete')
+            message = "id=%s,%s学习完毕\n结束图片链接：\n%s\nstudy url:\n%s" % (
+                self.course.id, self.course.title, self.course.end_img_url,self.course.study_url)
             try:
                 self.send_message(message)
             except:
                 print('send message fail')
             return 1
         except:
-            print('study fail')
+            print('learn fail')
             return 0
 
 
@@ -140,7 +146,7 @@ def main():
     if not course.update(youth.headers):
         print('update index error')
         return 0
-    if not youth.study_dxx():
+    if not youth.learn_dxx():
         return 0
     return 1
 
