@@ -44,7 +44,7 @@ class QNDXX_NEW_COURSE():
             return 0
 
 
-class QNDXX():
+class Youth():
     def __init__(self, course: QNDXX_NEW_COURSE) -> None:
         self.cookies = ''
         self.username = ''
@@ -115,13 +115,13 @@ class QNDXX():
         self.password = config['password']
         self.send_message_url = config['message_url']
 
-    def learn_dxx(self):
+    def study(self):
         # url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
         #     self.course.id, self.course.org_id)
         try:
             r = requests.get(self.course.study_url, self.headers, timeout=5)
             r.status_code
-            print('learn complete')
+            print('study complete')
             raw_message = "id=%s,%s learned\nend.jpg\n%s\nstudy url:\n%s" % (
                 self.course.id, self.course.title[6:10]+'...', self.course.end_img_url,self.course.study_url)
             message=requests.utils.quote(raw_message)
@@ -131,14 +131,14 @@ class QNDXX():
                 print('send message fail')
             return 1
         except:
-            print('learn fail')
+            print('study fail')
             return 0
 
 
 def main():
     print('Start')
     course = QNDXX_NEW_COURSE()
-    youth = QNDXX(course)
+    youth = Youth(course)
     youth.read_config()
     if not youth.get_cookie():
         print('get cookie error')
@@ -147,7 +147,7 @@ def main():
     if not course.update(youth.headers):
         print('update index error')
         return 0
-    if not youth.learn_dxx():
+    if not youth.study():
         return 0
     return 1
 
