@@ -122,8 +122,9 @@ class QNDXX():
             r = requests.get(self.course.study_url, self.headers, timeout=5)
             r.status_code
             print('learn complete')
-            message = "id=%s,%s学习完毕\n结束图片链接：\n%s\nstudy url:\n%s" % (
-                self.course.id, self.course.title, self.course.end_img_url,self.course.study_url)
+            raw_message = "id=%s,%s learned\nend.jpg\n%s\nstudy url:\n%s" % (
+                self.course.id, self.course.title[6:10]+'...', self.course.end_img_url,self.course.study_url)
+            message=requests.utils.quote(raw_message)
             try:
                 self.send_message(message)
             except:
