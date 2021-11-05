@@ -3,7 +3,7 @@
 ## Instructions
 
 1. Copy config.example.json to config.json
-2. Install [python](https://www.python.org/) , [GeckoDriver](https://github.com/mozilla/geckodriver/releases) ( [instructions from zhihu](https://zhuanlan.zhihu.com/p/33746273) ), run ``pip3 install -r requirements.txt`` to install requirements.
+2. Install [python](https://www.python.org/) , ~~[GeckoDriver](https://github.com/mozilla/geckodriver/releases) ( [instructions from zhihu](https://zhuanlan.zhihu.com/p/33746273) ),~~  run ``pip3 install -r requirements.txt`` to install requirements.
 3. Edit config.json. (Enter this [website](https://m.bjyouth.net/site/login) to retrieve the account and password)
 ```
 {
@@ -16,15 +16,19 @@
 
 ## Details
 
-1. Use selenium to log in to [Beijing Communist Youth League's Website](https://m.bjyouth.net/site/login) to get cookies.(use dddocr to recognize the captcha)
+1. ~~Use selenium to log in to [Beijing Communist Youth League's Website](https://m.bjyouth.net/site/login) to get cookies.(use dddocr to recognize the captcha)~~
+   
+   Get cookies with requests.
+
 2. Use cookies to get the newest course id. (from https://m.bjyouth.net/dxx/index)
-3. Send a request to https://m.bjyouth.net/dxx/check?id=50&org_id=172442 to finish learning.
+3. Send a request to https://m.bjyouth.net/dxx/check?id=50&org_id=172442 to finish learning.(you can visit [org list](https://m.bjyouth.net/org/list) to get org_id)
 
 
 ## TODO
 
-1. Use requests to login.
-2. Add mail support.
+1. ~~Use requests to login.~~
+2. Add Multi-user support
+3. Add mail support.
 
 ## Back up plan
 
