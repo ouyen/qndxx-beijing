@@ -2,23 +2,10 @@
 
 ## Instructions
 
-1. Copy config.example.json to config.json
-2. Install [python](https://www.python.org/) , ~~[GeckoDriver](https://github.com/mozilla/geckodriver/releases) ( [instructions from zhihu](https://zhuanlan.zhihu.com/p/33746273) ),~~  run ``pip3 install -r requirements.txt`` to install requirements.
-3. Edit config.json. (Enter this [website](https://m.bjyouth.net/site/login) to retrieve the account and password)
-```
-{
-    "youth": [
-        {
-            "username": "",--your phone number
-            "password": "",--your password
-            "org_id": "",-- your organization id (default 172442)
-            "message_url": "",--When the study is over, requests.get(message_url % message) to send message.If you don't konw what it is,leave it blank. 
-            "send_message_org_id":""-- you can change this to change the org_id in message.(default 172442,blank means same as org_id)
-        }
-    ]
-}
-```
-4.run  ``python3 main.py`` to learn QNDXX
+
+1. Install [python](https://www.python.org/) , ~~[GeckoDriver](https://github.com/mozilla/geckodriver/releases),~~  run ``pip3 install -r requirements.txt`` to install requirements.
+2. Copy config.example.yaml to config.yaml. Edit config.yaml. (Enter this [website](https://m.bjyouth.net/site/login) to retrieve the account and password. Get your organization id [here](https://m.bjyouth.net/qndxx/index.html#/pages/home/my))
+3. run  ``python3 main.py`` to learn QNDXX
 
 ## Details
 
