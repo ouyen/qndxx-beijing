@@ -7,9 +7,15 @@
 3. Edit config.json. (Enter this [website](https://m.bjyouth.net/site/login) to retrieve the account and password)
 ```
 {
-    "username":"12345678901",:your phone number
-    "password":"qndxxpassword",:your password
-    "message_url":"":When the study is over, requests.get(message_url % message) to send message.If you don't konw what it is,leave it blank. 
+    "youth": [
+        {
+            "username": "",--your phone number
+            "password": "",--your password
+            "org_id": "",-- your organization id (default 172442)
+            "message_url": "",--When the study is over, requests.get(message_url % message) to send message.If you don't konw what it is,leave it blank. 
+            "send_message_org_id":""-- you can change this to change the org_id in message.(default 172442,blank means same as org_id)
+        }
+    ]
 }
 ```
 4.run  ``python3 main.py`` to learn QNDXX
@@ -27,7 +33,7 @@
 ## TODO
 
 1. ~~Use requests to login.~~
-2. Add Multi-user support
+2. ~~Add Multi-user support~~
 3. Add mail support.
 
 ## Back up plan

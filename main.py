@@ -19,10 +19,10 @@ class QNDXX_NEW_COURSE():
         self.id = 59
         self.title = '青年大学习：江山就是人民，人民就是江山'
         self.url = "https://h5.cyol.com/special/daxuexi/byw1m1kn1s/m.html?t=1&z=201",
-        self.org_id = 172442  #"北京市海淀团区委"
+        # self.org_id = 172442  #"北京市海淀团区委"
         self.end_img_url = 'https://h5.cyol.com/special/daxuexi/byw1m1kn1s/images/end.jpg'  #example
         self.study_url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
-            self.id, self.org_id)
+            self.id, '%s')
 
     def update(self, headers):
         try:
@@ -38,7 +38,7 @@ class QNDXX_NEW_COURSE():
             i = self.url.find("/m.html")
             self.end_img_url = self.url[:i] + '/images/end.jpg'
             self.study_url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
-                self.id, self.org_id)
+                self.id, '%s')
             print('update success')
             return 1
         except:
@@ -53,14 +53,16 @@ class Youth():
         self.password = ''
         self.get_cookies_turn = 5
         self.course = course
-        self.ua="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x6303004c)"
+        self.ua = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x6303004c)"
         self.headers = {
             "Host": "m.bjyouth.net",
-            "User-Agent":self.ua,
+            "User-Agent": self.ua,
             "Cookie": '',
             "Referer": "https://m.bjyouth.net/qndxx/index.html"
         }
         self.send_message_url = ''
+        self.org_id = '172442'  #"北京市海淀团区委"
+        self.send_message_org_id='172442'
         # example
 
     # def get_login_cookie_with_selenium(self):
@@ -93,7 +95,7 @@ class Youth():
     def get_cookie(self):
         for i in range(self.get_cookies_turn):
             # cookies = self.get_login_cookie_with_selenium()
-            cookies=self.get_cookie_with_requests()
+            cookies = self.get_cookie_with_requests()
             if cookies:
                 self.cookies = 'PHPSESSID=' + cookies
                 self.headers["Cookie"] = self.cookies
@@ -109,19 +111,13 @@ class Youth():
         return cipher_text.decode()
 
     def get_cookie_with_requests(self):
-        # try:
-        if(1):
+        try:
+            # if (1):
             S = requests.Session()
-            headers = {
-                "Host":
-                "m.bjyouth.net",
-                "User-Agent":
-                self.ua
-                }
+            headers = {"Host": "m.bjyouth.net", "User-Agent": self.ua}
             r = S.get(url="https://m.bjyouth.net/site/login",
-                    headers=headers,
-                    timeout=5
-                    )
+                      headers=headers,
+                      timeout=5)
             # print(r.status_code)
             r.status_code
             cap_url = "https://m.bjyouth.net" + findall(
@@ -137,17 +133,17 @@ class Youth():
             login_username = self.encrpt(self.username)
             login_password = self.encrpt(self.password)
             login_r = S.post('https://m.bjyouth.net/site/login',
-                            headers=headers,
-                            data={
-                                '_csrf_mobile': _csrf_mobile,
-                                'Login[username]': login_username,
-                                'Login[password]': login_password,
-                                'Login[verifyCode]': cap_text
-                            },
-                            timeout=5)
+                             headers=headers,
+                             data={
+                                 '_csrf_mobile': _csrf_mobile,
+                                 'Login[username]': login_username,
+                                 'Login[password]': login_password,
+                                 'Login[verifyCode]': cap_text
+                             },
+                             timeout=5)
             return login_r.cookies.get_dict()['PHPSESSID']
-        # except:
-        #     return 0
+        except:
+            return 0
 
     def send_message(self, message: str):
         if self.send_message_url == '':
@@ -160,23 +156,35 @@ class Youth():
         except:
             return 0
 
-    def read_config(self, config_path="config.json"):
-        with open(config_path, 'r') as f:
-            config = json.load(f)
+    def read_config(self, config):
+        # with open(config_path, 'r') as f:
+        #     config = json.load(f)
         self.username = config['username']
         self.password = config['password']
+        if not (self.username and self.password):
+            raise "username and password cannot be blank!!!"
+        self.org_id = config['org_id'] or self.org_id
         self.send_message_url = config['message_url']
+        self.send_message_org_id=config['send_message_org_id'] or self.org_id
 
     def study(self):
         # url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
         #     self.course.id, self.course.org_id)
         try:
-            r = requests.get(self.course.study_url, self.headers, timeout=5)
+            r = requests.get(url=self.course.study_url % self.org_id,
+                             headers=self.headers,
+                             timeout=5)
             r.status_code
+            print(self.course.study_url % self.org_id)
+            if r.text:
+                print(
+                    'Error,maybe something went wrong in getting cookies or the url is not correct or the website changed'
+                )
+                return 0
             print('study complete')
-            raw_message = "id=%s,%s learned\nend.jpg\n%s\nstudy url:\n%s" % (
-                self.course.id, self.course.title[6:10] + '...',
-                self.course.end_img_url, self.course.study_url)
+            raw_message = "%s learned id=%s : %s\nend.jpg\n%s\nstudy url:\n%s" % (
+                self.username, self.course.id, self.course.title[6:10] + '...',
+                self.course.end_img_url, self.course.study_url%self.send_message_org_id)
             message = requests.utils.quote(raw_message)
             try:
                 self.send_message(message)
@@ -190,18 +198,28 @@ class Youth():
 
 def main():
     print('Start')
+    course_need_update=True
     course = QNDXX_NEW_COURSE()
     youth = Youth(course)
-    youth.read_config()
-    if not youth.get_cookie():
-        print('get cookie error')
-        return 0
-    print('get cookie')
-    if not course.update(youth.headers):
-        print('update index error')
-        return 0
-    if not youth.study():
-        return 0
+    with open('config.json', 'r') as f:
+        config_dict = json.load(f)
+    for single_config in config_dict['youth']:
+        youth.read_config(single_config)
+        # youth.read_config()
+        if not youth.get_cookie():
+            print('get cookie error')
+            # return 0
+            continue
+        print('get cookie')
+        if(course_need_update):
+            if not course.update(youth.headers):
+                print('update index error')
+                # return 0
+                continue
+            course_need_update=False
+        if not youth.study():
+            # return 0
+            continue
     return 1
 
 
