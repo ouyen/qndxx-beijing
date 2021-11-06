@@ -12,6 +12,7 @@ from Crypto.Cipher import PKCS1_v1_5 as Cipher_pksc1_v1_5
 from Crypto.PublicKey import RSA
 # import base64
 from base64 import b64encode
+import yaml
 
 
 class QNDXX_NEW_COURSE():
@@ -201,8 +202,10 @@ def main():
     course_need_update=True
     course = QNDXX_NEW_COURSE()
     youth = Youth(course)
-    with open('config.json', 'r') as f:
-        config_dict = json.load(f)
+    # with open('config.json', 'r') as f:
+    #     config_dict = json.load(f)
+    with open('config.yaml','r') as f:
+        config_dict=yaml.safe_load(f)
     for single_config in config_dict['youth']:
         youth.read_config(single_config)
         # youth.read_config()

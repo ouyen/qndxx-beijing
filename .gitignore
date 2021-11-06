@@ -1,6 +1,6 @@
 *
 !main.py
-!config.simple.json
 !README.md
 !.gitignore
 !requirements.txt
+!config.example.yaml
