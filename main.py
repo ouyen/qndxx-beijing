@@ -144,7 +144,7 @@ class Youth():
                     f'[ERROR] The url{study_url} maybe not correct or the website changed'
                 )
                 return 0
-            print(f'[INFO] {self.username} study complete')
+            print(f'[INFO] Study complete')
             raw_message = f"{self.username} learned id={self.course.id} :\n{self.course.title[6:10] + '...'}\nend.jpg:\n{self.course.end_img_url}\nstudy url:\n{self.course.study_url % self.send_message_org_id}"
             self.send_message(raw_message)
             return 1
@@ -160,6 +160,7 @@ def main():
     with open('config.yaml', 'r') as f:
         config_dict = yaml.safe_load(f)
     for single_config in config_dict['youth']:
+        print(single_config['username'],'Start')
         youth.read_config(single_config)
         if not youth.get_cookie():
             continue
