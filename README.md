@@ -16,7 +16,7 @@
 2. Use cookies to get the newest course id. (from https://m.bjyouth.net/dxx/index)
 3. Send a request to https://m.bjyouth.net/dxx/check?id=50&org_id=172442 to finish learning.(you can visit [org list](https://m.bjyouth.net/org/list) to get org_id)
 
-## Multi-user support
+## Multi-user Support
 
 Your ``config.yaml`` should be like this:
 
