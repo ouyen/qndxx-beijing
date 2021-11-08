@@ -1,18 +1,12 @@
-# from selenium import webdriver
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.common.by import By
 import json
-# import time
-# from datetime import date
 import requests
 from ddddocr import DdddOcr
-from re import findall
+import re
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pksc1_v1_5
 from Crypto.PublicKey import RSA
-# import base64
 from base64 import b64encode
 import yaml
+import argparse
 
 
 class QNDXX_NEW_COURSE():
@@ -22,8 +16,8 @@ class QNDXX_NEW_COURSE():
         self.url = "https://h5.cyol.com/special/daxuexi/byw1m1kn1s/m.html?t=1&z=201",
         # self.org_id = 172442  #"北京市海淀团区委"
         self.end_img_url = 'https://h5.cyol.com/special/daxuexi/byw1m1kn1s/images/end.jpg'  #example
-        self.study_url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
-            self.id, '%s')
+        self.study_url = f"https://m.bjyouth.net/dxx/check?id={self.id}&org_id=%s"
+        self.need_update = True
 
     def update(self, headers):
         try:
@@ -38,12 +32,11 @@ class QNDXX_NEW_COURSE():
             # self.org_id = index['rank'][0]['data'][1]['org_id']
             i = self.url.find("/m.html")
             self.end_img_url = self.url[:i] + '/images/end.jpg'
-            self.study_url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
-                self.id, '%s')
-            print('update success')
+            self.study_url = f"https://m.bjyouth.net/dxx/check?id={self.id}&org_id=%s"
+            print('[INFO] Class updated success')
             return 1
         except:
-            print('update fail')
+            print('[ERROR] Class update failed')
             return 0
 
 
@@ -63,76 +56,49 @@ class Youth():
         }
         self.send_message_url = ''
         self.org_id = '172442'  #"北京市海淀团区委"
-        self.send_message_org_id='172442'
-        # example
-
-    # def get_login_cookie_with_selenium(self):
-
-    #     ff_op = webdriver.FirefoxOptions()
-    #     ff_op.set_headless()
-    #     driver = webdriver.Firefox(firefox_options=ff_op)
-    #     # driver=webdriver.PhantomJS() --> cannot work with captcha
-    #     driver.get('https://m.bjyouth.net/site/login')
-
-    #     try:
-    #         # cap=driver.find_element_by_id('verifyCode-image')
-    #         cap = WebDriverWait(driver, 10).until(
-    #             EC.presence_of_element_located((By.ID, "verifyCode-image")))
-    #         ocr = DdddOcr()
-    #         res = ocr.classification(cap.screenshot_as_png)
-    #         print(res)
-
-    #         driver.find_element_by_id("username").send_keys(self.username)
-    #         driver.find_element_by_id("password").send_keys(self.password)
-    #         driver.find_element_by_id("verifyCode").send_keys(res)
-    #         driver.find_element_by_tag_name('button').click()
-    #         rtn = driver.get_cookie('PHPSESSID')
-    #         driver.quit()
-    #         return rtn['value']
-    #     except:
-    #         driver.quit()
-    #         return 0
+        self.send_message_org_id = '172442'
 
     def get_cookie(self):
         for i in range(self.get_cookies_turn):
             # cookies = self.get_login_cookie_with_selenium()
+            print(f'[INFO] Try to get cookie ... {i}/{self.get_cookies_turn}')
             cookies = self.get_cookie_with_requests()
             if cookies:
                 self.cookies = 'PHPSESSID=' + cookies
                 self.headers["Cookie"] = self.cookies
+                print('[INFO] Get cookie successfully.')
                 return 1
+        print('[ERROR] Get cookie error! please check your password.')
         return 0
 
-    def encrpt(self, password, public_key=''):
+    def encrypt(self, password, public_key=''):
         if public_key == '':
             public_key = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD5uIDebA2qU746e/NVPiQSBA0Q3J8/G23zfrwMz4qoip1vuKaVZykuMtsAkCJFZhEcmuaOVl8nAor7cz/KZe8ZCNInbXp2kUQNjJiOPwEhkGiVvxvU5V5vCK4mzGZhhawF5cI/pw2GJDSKbXK05YHXVtOAmg17zB1iJf+ie28TbwIDAQAB\n-----END PUBLIC KEY-----"
-        rsakey = RSA.importKey(public_key)
-        cipher = Cipher_pksc1_v1_5.new(rsakey)
+        rsa_key = RSA.importKey(public_key)
+        cipher = Cipher_pksc1_v1_5.new(rsa_key)
         cipher_text = b64encode(cipher.encrypt(password.encode()))
         return cipher_text.decode()
 
     def get_cookie_with_requests(self):
         try:
-            # if (1):
             S = requests.Session()
             headers = {"Host": "m.bjyouth.net", "User-Agent": self.ua}
             r = S.get(url="https://m.bjyouth.net/site/login",
                       headers=headers,
                       timeout=5)
-            # print(r.status_code)
             r.status_code
-            cap_url = "https://m.bjyouth.net" + findall(
+            cap_url = "https://m.bjyouth.net" + re.findall(
                 r'src="/site/captcha.+" alt=', r.text)[0][5:-6]
             headers["Referer"] = "https://m.bjyouth.net/site/login"
             cap = S.get(url=cap_url, headers=headers, timeout=5)
             cap.status_code
             ocr = DdddOcr()
             cap_text = ocr.classification(cap.content)
-            print(cap_text)
+            print(f'[INFO] Captcha OCR: {cap_text}')
             _csrf_mobile = S.cookies.get_dict()['_csrf_mobile']
             headers['Origin'] = "https://m.bjyouth.net"
-            login_username = self.encrpt(self.username)
-            login_password = self.encrpt(self.password)
+            login_username = self.encrypt(self.username)
+            login_password = self.encrypt(self.password)
             login_r = S.post('https://m.bjyouth.net/site/login',
                              headers=headers,
                              data={
@@ -146,85 +112,88 @@ class Youth():
         except:
             return 0
 
-    def send_message(self, message: str):
-        if self.send_message_url == '':
-            return 2
-        try:
-            url = self.send_message_url % message
-            r = requests.get(url, timeout=5)
-            r.status_code
-            return 1
-        except:
-            return 0
+    def send_message(self, raw_message: str):
+        if self.send_message_url != '':
+            message = requests.utils.quote(raw_message)
+            try:
+                print('[INFO] Sending message')
+                url = self.send_message_url % message
+                r = requests.get(url, timeout=5)
+                r.status_code
+                return 1
+            except:
+                print('[ERROR] Send message failed')
+                return 0
 
     def read_config(self, config):
-        # with open(config_path, 'r') as f:
-        #     config = json.load(f)
         self.username = config['username']
         self.password = config['password']
         if not (self.username and self.password):
             raise "username and password cannot be blank!!!"
         self.org_id = config['org_id'] or self.org_id
         self.send_message_url = config['message_url']
-        self.send_message_org_id=config['send_message_org_id'] or self.org_id
+        self.send_message_org_id = config['send_message_org_id'] or self.org_id
 
     def study(self):
-        # url = "https://m.bjyouth.net/dxx/check?id=%s&org_id=%s" % (
-        #     self.course.id, self.course.org_id)
         try:
-            r = requests.get(url=self.course.study_url % self.org_id,
+            study_url = self.course.study_url % self.org_id
+            r = requests.get(url=study_url,
                              headers=self.headers,
                              timeout=5)
             r.status_code
-            print(self.course.study_url % self.org_id)
             if r.text:
                 print(
-                    'Error,maybe something went wrong in getting cookies or the url is not correct or the website changed'
+                    f'[ERROR] The url{study_url} maybe not correct or the website changed'
                 )
                 return 0
-            print('study complete')
-            raw_message = "%s learned id=%s : %s\nend.jpg\n%s\nstudy url:\n%s" % (
-                self.username, self.course.id, self.course.title[6:10] + '...',
-                self.course.end_img_url, self.course.study_url%self.send_message_org_id)
-            message = requests.utils.quote(raw_message)
-            try:
-                self.send_message(message)
-            except:
-                print('send message fail')
+            print(f'[INFO] {self.username} study complete')
+            raw_message = f"{self.username} learned id={self.course.id} :\n{self.course.title[6:10] + '...'}\nend.jpg:\n{self.course.end_img_url}\nstudy url:\n{self.course.study_url % self.send_message_org_id}"
+            self.send_message(raw_message)
             return 1
         except:
-            print('study fail')
+            print('[ERROR] Study fail')
             return 0
 
 
 def main():
-    print('Start')
-    course_need_update=True
     course = QNDXX_NEW_COURSE()
     youth = Youth(course)
-    # with open('config.json', 'r') as f:
-    #     config_dict = json.load(f)
-    with open('config.yaml','r') as f:
-        config_dict=yaml.safe_load(f)
+    print('[INFO] Read config from config.yaml')
+    with open('config.yaml', 'r') as f:
+        config_dict = yaml.safe_load(f)
     for single_config in config_dict['youth']:
         youth.read_config(single_config)
-        # youth.read_config()
         if not youth.get_cookie():
-            print('get cookie error')
-            # return 0
             continue
-        print('get cookie')
-        if(course_need_update):
+        if (course.need_update):
             if not course.update(youth.headers):
-                print('update index error')
-                # return 0
                 continue
-            course_need_update=False
+            course.need_update = False
         if not youth.study():
-            # return 0
             continue
     return 1
 
+def main_cli(args):
+    print('[INFO] Read config from command line parameters')
+    print('[INFO] Start')
+    course = QNDXX_NEW_COURSE()
+    youth = Youth(course)
+    youth.username = args.username
+    youth.password = args.password
+    youth.org_id = args.org_id
+    if not youth.get_cookie():
+        return 0
+    if not youth.study():
+        return 0
+
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--username', type=str)
+    parser.add_argument('--password', type=str)
+    parser.add_argument('--org_id', type=str)
+    args = parser.parse_args()
+    if(args.username and args.password and args.org_id):
+        main_cli(args)
+    else:
+        main()
