@@ -1,7 +1,7 @@
 import json
-import requests
 from ddddocr import DdddOcr
 import re
+import requests
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pksc1_v1_5
 from Crypto.PublicKey import RSA
 from base64 import b64encode
@@ -137,9 +137,7 @@ class Youth():
     def study(self):
         try:
             study_url = self.course.study_url % self.org_id
-            r = requests.get(url=study_url,
-                             headers=self.headers,
-                             timeout=5)
+            r = requests.get(url=study_url, headers=self.headers, timeout=5)
             r.status_code
             if r.text:
                 print(
@@ -173,6 +171,7 @@ def main():
             continue
     return 1
 
+
 def main_cli(args):
     print('[INFO] Read config from command line parameters')
     print('[INFO] Start')
@@ -193,7 +192,7 @@ if __name__ == '__main__':
     parser.add_argument('--password', type=str)
     parser.add_argument('--org_id', type=str)
     args = parser.parse_args()
-    if(args.username and args.password and args.org_id):
+    if (args.username and args.password and args.org_id):
         main_cli(args)
     else:
         main()

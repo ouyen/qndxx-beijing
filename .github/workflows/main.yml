@@ -1,0 +1,30 @@
+name: AutoQNDXX
+
+on:
+  schedule:
+    # Run at 16:50 on every Sunday.
+    - cron: '50 16 * * 7'
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: 'Set up Python'
+        uses: actions/setup-python@v1
+        with:
+           python-version: 3.8
+           
+      - name: 'Install requirements'
+        run: pip install -r requirements.txt
+        
+      - name: 'Working'
+        run: |
+          python main.py --username ${{secrets.USERNAME}} --password ${{secrets.PASSWORD}} --org_id ${{secrets.ORG_ID}}
+        

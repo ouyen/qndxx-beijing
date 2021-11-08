@@ -1,6 +1,9 @@
 *
 !main.py
 !README.md
-!.gitignore
+# !.gitignore
 !requirements.txt
 !config.example.yaml
+!.github/
+!.github/workflows/
+!.github/workflows/main.yml
