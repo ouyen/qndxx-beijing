@@ -36,6 +36,20 @@ youth:
 # user3...
 
 ```
+## Github Actions Support (from https://github.com/ashawkey/autodxx)
+
+### Instructions
+
+1. Clone this repository.
+2. Create github secrets (Settings --> Secrets --> New Repository secret):
+   * USERNAME: your account username (phone number). Visit [here](https://m.bjyouth.net/site/login) to retrieve.
+   * PASSWORD: your account password.
+   * ORG_ID: your organization id. Visit [here](https://m.bjyouth.net/qndxx/index.html#/pages/home/my) to retrieve.
+
+3. Edit `.github/workflow/main.yml`.
+   * by default it runs at 16:50 on every Sunday, change `cron` if you want to run at a different time.
+
+4. Enable workflow for this repository in Actions.
 
 ## TODO
 
@@ -46,5 +60,6 @@ youth:
 ## Back up plan
 
 In general, it is always possible to go through the normal process in selenium headless mode, but the current method is feasible, so I will not continue to develop it now.
+
 
 ## TAKE YOUR OWN RISK!!!
