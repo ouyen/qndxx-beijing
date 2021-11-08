@@ -182,6 +182,8 @@ def main_cli(args):
     youth.org_id = args.org_id
     if not youth.get_cookie():
         return 0
+    if not course.update(youth.headers):
+        return 0
     if not youth.study():
         return 0
 
