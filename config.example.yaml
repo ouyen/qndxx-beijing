@@ -4,4 +4,10 @@ youth:
   org_id: '172442' # your organization id (default 172442)
   message_url: '' #When the study is over, requests.get(message_url % message) to send message.If you don't konw what it is,leave it blank. 
   send_message_org_id: '172442'  #you can change this to change the org_id in message.(default 172442,blank means same as org_id)
-
+  email: ""
+Mailer:
+  connect: ""
+  port: 25
+  login_address: ""
+  login_password: ""
+  send_address: ""

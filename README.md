@@ -55,7 +55,7 @@ youth:
 
 1. ~~Use requests to login.~~
 2. ~~Add Multi-user support~~
-3. Add mail support.
+3. ~~Add mail support.~~
 
 ## Back up plan
 

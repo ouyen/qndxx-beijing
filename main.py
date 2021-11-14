@@ -7,6 +7,44 @@ from Crypto.PublicKey import RSA
 from base64 import b64encode
 import yaml
 import argparse
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
+
+class Mailer():
+    def __init__(self) -> None:
+        self.connect=''
+        self.connect_port=25
+        self.login_address=""
+        self.login_password=""
+        self.send_address=""
+
+    def send_mail(self,receiver_address,text):
+        message = MIMEText(text, 'plain', 'utf-8')
+        message['From'] = Header("qndxx", 'utf-8')   
+        message['Subject'] = Header('QNDXX success!', 'utf-8')
+        try:
+            smtpObj=smtplib.SMTP()
+            smtpObj.connect(self.connect,self.connect_port)
+            smtpObj.login(self.login_address,self.login_password)
+            smtpObj.sendmail(self.send_address,receiver_address,message.as_string())
+            print('[INFO] Mail sent successfully')
+            return 1
+        except:
+            print('[ERROR] Failed to send mail')
+
+    def read_config(self,config_dict:dict):
+        try:
+            self.connect=config_dict['connect']
+            self.connect_port=config_dict['port'] or 25
+            self.login_address=config_dict['login_address']
+            self.login_password=config_dict['login_password']
+            self.send_address=config_dict['send_address'] or self.login_address
+            return 1
+        except:
+            print('[ERROR] Failed to read mail config')
+            return 0
+
 
 
 class QNDXX_NEW_COURSE():
@@ -41,12 +79,12 @@ class QNDXX_NEW_COURSE():
 
 
 class Youth():
-    def __init__(self, course: QNDXX_NEW_COURSE) -> None:
+    def __init__(self) -> None:
         self.cookies = ''
         self.username = ''
         self.password = ''
         self.get_cookies_turn = 5
-        self.course = course
+        self.course = QNDXX_NEW_COURSE()
         self.ua = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x6303004c)"
         self.headers = {
             "Host": "m.bjyouth.net",
@@ -57,6 +95,8 @@ class Youth():
         self.send_message_url = ''
         self.org_id = '172442'  #"北京市海淀团区委"
         self.send_message_org_id = '172442'
+        self.mailer=Mailer()
+        self.email=''
 
     def get_cookie(self):
         for i in range(self.get_cookies_turn):
@@ -133,6 +173,7 @@ class Youth():
         self.org_id = config['org_id'] or self.org_id
         self.send_message_url = config['message_url']
         self.send_message_org_id = config['send_message_org_id'] or self.org_id
+        self.email=config['email'] or ''
 
     def study(self):
         try:
@@ -146,6 +187,8 @@ class Youth():
                 return 0
             print(f'[INFO] Study complete')
             raw_message = f"{self.username} learned id={self.course.id} :\n{self.course.title[6:10] + '...'}\nend.jpg:\n{self.course.end_img_url}\nstudy url:\n{self.course.study_url % self.send_message_org_id}"
+            if self.email and self.mailer:
+                self.mailer.send_mail(self.email,raw_message)
             self.send_message(raw_message)
             return 1
         except:
@@ -154,11 +197,13 @@ class Youth():
 
 
 def main():
-    course = QNDXX_NEW_COURSE()
-    youth = Youth(course)
+    youth = Youth()
+    course = youth.course
     print('[INFO] Read config from config.yaml')
     with open('config.yaml', 'r') as f:
         config_dict = yaml.safe_load(f)
+    mailer=youth.mailer
+    mailer.read_config(config_dict['Mail'])
     for single_config in config_dict['youth']:
         print(single_config['username'],'Start')
         youth.read_config(single_config)
