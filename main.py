@@ -21,8 +21,8 @@ class Mailer():
 
     def send_mail(self,receiver_address,text):
         message = MIMEText(text, 'plain', 'utf-8')
-        message['From'] = Header("qndxx", 'utf-8')   
-        message['Subject'] = Header('QNDXX success!', 'utf-8')
+        message['From'] = Header("qndxx")   
+        message['Subject'] = Header('QNDXX success!')
         try:
             smtpObj=smtplib.SMTP()
             smtpObj.connect(self.connect,self.connect_port)
