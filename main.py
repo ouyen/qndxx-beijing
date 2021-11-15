@@ -222,7 +222,7 @@ def main_cli(args):
     print('[INFO] Read config from command line parameters')
     print('[INFO] Start')
     course = QNDXX_NEW_COURSE()
-    youth = Youth(course)
+    youth = Youth()
     youth.username = args.username
     youth.password = args.password
     youth.org_id = args.org_id
