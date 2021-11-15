@@ -2,8 +2,8 @@ name: AutoQNDXX
 
 on:
   schedule:
-    # Run at 16:50 on every Sunday.
-    - cron: '50 16 * * 6'
+    # Run at 8:00 on every Tuesday.
+    - cron: '0 0  * * 2'
     
   workflow_dispatch:
 
