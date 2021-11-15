@@ -221,14 +221,13 @@ def main():
 def main_cli(args):
     print('[INFO] Read config from command line parameters')
     print('[INFO] Start')
-    course = QNDXX_NEW_COURSE()
-    youth = Youth(course)
+    youth = Youth()
     youth.username = args.username
     youth.password = args.password
     youth.org_id = args.org_id
     if not youth.get_cookie():
         return 0
-    if not course.update(youth.headers):
+    if not youth.course.update(youth.headers):
         return 0
     if not youth.study():
         return 0
