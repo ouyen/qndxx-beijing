@@ -203,7 +203,7 @@ def main():
     with open('config.yaml', 'r') as f:
         config_dict = yaml.safe_load(f)
     mailer=youth.mailer
-    mailer.read_config(config_dict['Mail'])
+    mailer.read_config(config_dict['Mailer'])
     for single_config in config_dict['youth']:
         print(single_config['username'],'Start')
         youth.read_config(single_config)
