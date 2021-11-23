@@ -11,40 +11,42 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 
+
 class Mailer():
     def __init__(self) -> None:
-        self.connect=''
-        self.connect_port=25
-        self.login_address=""
-        self.login_password=""
-        self.send_address=""
+        self.connect = ''
+        self.connect_port = 25
+        self.login_address = ""
+        self.login_password = ""
+        self.send_address = ""
 
-    def send_mail(self,receiver_address,text):
+    def send_mail(self, receiver_address, text):
         message = MIMEText(text, 'plain', 'utf-8')
-        message['From'] = Header("qndxx")   
+        message['From'] = Header("qndxx")
         message['Subject'] = Header('QNDXX success!')
         try:
-            smtpObj=smtplib.SMTP()
-            smtpObj.connect(self.connect,self.connect_port)
-            smtpObj.login(self.login_address,self.login_password)
-            smtpObj.sendmail(self.send_address,receiver_address,message.as_string())
+            smtpObj = smtplib.SMTP()
+            smtpObj.connect(self.connect, self.connect_port)
+            smtpObj.login(self.login_address, self.login_password)
+            smtpObj.sendmail(self.send_address, receiver_address,
+                             message.as_string())
             print('[INFO] Mail sent successfully')
             return 1
         except:
             print('[ERROR] Failed to send mail')
 
-    def read_config(self,config_dict:dict):
+    def read_config(self, config_dict: dict):
         try:
-            self.connect=config_dict['connect']
-            self.connect_port=config_dict['port'] or 25
-            self.login_address=config_dict['login_address']
-            self.login_password=config_dict['login_password']
-            self.send_address=config_dict['send_address'] or self.login_address
+            self.connect = config_dict['connect']
+            self.connect_port = config_dict['port'] or 25
+            self.login_address = config_dict['login_address']
+            self.login_password = config_dict['login_password']
+            self.send_address = config_dict[
+                'send_address'] or self.login_address
             return 1
         except:
             print('[ERROR] Failed to read mail config')
             return 0
-
 
 
 class QNDXX_NEW_COURSE():
@@ -95,8 +97,8 @@ class Youth():
         self.send_message_url = ''
         self.org_id = '172442'  #"北京市海淀团区委"
         self.send_message_org_id = '172442'
-        self.mailer=Mailer()
-        self.email=''
+        self.mailer = Mailer()
+        self.email = ''
 
     def get_cookie(self):
         for i in range(self.get_cookies_turn):
@@ -173,7 +175,7 @@ class Youth():
         self.org_id = config['org_id'] or self.org_id
         self.send_message_url = config['message_url']
         self.send_message_org_id = config['send_message_org_id'] or self.org_id
-        self.email=config['email'] or ''
+        self.email = config['email'] or ''
 
     def study(self):
         try:
@@ -188,7 +190,7 @@ class Youth():
             print(f'[INFO] Study complete')
             raw_message = f"{self.username} learned id={self.course.id} :\n{self.course.title[6:10] + '...'}\nend.jpg:\n{self.course.end_img_url}\nstudy url:\n{self.course.study_url % self.send_message_org_id}"
             if self.email and self.mailer:
-                self.mailer.send_mail(self.email,raw_message)
+                self.mailer.send_mail(self.email, raw_message)
             self.send_message(raw_message)
             return 1
         except:
@@ -196,16 +198,31 @@ class Youth():
             return 0
 
 
-def main():
+def main(remote_config=''):
     youth = Youth()
     course = youth.course
     print('[INFO] Read config from config.yaml')
-    with open('config.yaml', 'r') as f:
-        config_dict = yaml.safe_load(f)
-    mailer=youth.mailer
+    if remote_config:
+        print('[INFO] Read remote config')
+        try:
+            r = requests.get(remote_config, timeout=5)
+            r.status_code
+            print('[INFO] Get remote config succeed')
+            try:
+                config_dict = yaml.safe_load(r.text)
+            except:
+                print('[ERROR] Please check your remote config')
+                return 0
+        except:
+            print('[ERROR] Get remote config failed')
+            return 0
+    else:
+        with open('config.yaml', 'r') as f:
+            config_dict = yaml.safe_load(f)
+    mailer = youth.mailer
     mailer.read_config(config_dict['Mailer'])
     for single_config in config_dict['youth']:
-        print(single_config['username'],'Start')
+        print(single_config['username'], 'Start')
         youth.read_config(single_config)
         if not youth.get_cookie():
             continue
@@ -238,8 +255,11 @@ if __name__ == '__main__':
     parser.add_argument('--username', type=str)
     parser.add_argument('--password', type=str)
     parser.add_argument('--org_id', type=str)
+    parser.add_argument('--remote_config', type=str)
     args = parser.parse_args()
-    if (args.username and args.password and args.org_id):
+    if (args.remote_config):
+        main(args.remote_config)
+    elif (args.username and args.password and args.org_id):
         main_cli(args)
     else:
         main()
