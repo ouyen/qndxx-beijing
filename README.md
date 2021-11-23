@@ -42,9 +42,12 @@ youth:
 
 1. Clone this repository.
 2. Create github secrets (Settings --> Secrets --> New Repository secret):
-   * USERNAME: your account username (phone number). Visit [here](https://m.bjyouth.net/site/login) to retrieve.
-   * PASSWORD: your account password.
-   * ORG_ID: your organization id. Visit [here](https://m.bjyouth.net/qndxx/index.html#/pages/home/my) to retrieve.
+   * Use config.yaml (Recommended)
+     * REMOTE_CONFIG: Create a config.yaml , upload to [Gist](https://gist.github.com) to get raw's link (like https://gist.githubusercontent.com/ouyen/xxx/raw/xxx/config.yaml).
+   * Original plan
+     * USERNAME: your account username (phone number). Visit [here](https://m.bjyouth.net/site/login) to retrieve.
+     * PASSWORD: your account password.
+     * ORG_ID: your organization id. Visit [here](https://m.bjyouth.net/qndxx/index.html#/pages/home/my) to retrieve.
 
 3. Edit `.github/workflow/main.yml`.
    * by default it runs at *08:00 *on every Tuesday, change `cron` if you want to run at a different time.

@@ -1,4 +1,3 @@
-import argparse
 import json
 import os
 import re
@@ -241,9 +240,6 @@ def main_cli(args):
     print('[INFO] Read config from command line parameters')
     print('[INFO] Start')
     youth = Youth()
-    # youth.username = args.username
-    # youth.password = args.password
-    # youth.org_id = args.org_id
     youth.username = args["USERNAME"]
     youth.password = args["PASSWORD"]
     youth.org_id = args["ORG_ID"]
@@ -256,16 +252,9 @@ def main_cli(args):
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--username', type=str)
-    # parser.add_argument('--password', type=str)
-    # parser.add_argument('--org_id', type=str)
-    # parser.add_argument('--remote_config', type=str)
-    # args = parser.parse_args()
     ENV={_i:os.getenv(_i) for _i in ['PASSWORD','USERNAME','ORG_ID','REMOTE_CONFIG']}
     if (ENV['REMOTE_CONFIG']):
         main(ENV['REMOTE_CONFIG'])
-    # elif (args.username and args.password and args.org_id):
     elif(ENV['USERNAME'] and ENV['PASSWORD'] and ENV['ORG_ID']):
         main_cli(ENV)
     else:
