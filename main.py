@@ -1,15 +1,17 @@
+import argparse
 import json
-from ddddocr import DdddOcr
+import os
 import re
+import smtplib
+from base64 import b64encode
+from email.header import Header
+from email.mime.text import MIMEText
+
 import requests
+import yaml
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pksc1_v1_5
 from Crypto.PublicKey import RSA
-from base64 import b64encode
-import yaml
-import argparse
-import smtplib
-from email.mime.text import MIMEText
-from email.header import Header
+from ddddocr import DdddOcr
 
 
 class Mailer():
@@ -239,9 +241,12 @@ def main_cli(args):
     print('[INFO] Read config from command line parameters')
     print('[INFO] Start')
     youth = Youth()
-    youth.username = args.username
-    youth.password = args.password
-    youth.org_id = args.org_id
+    # youth.username = args.username
+    # youth.password = args.password
+    # youth.org_id = args.org_id
+    youth.username = args["USERNAME"]
+    youth.password = args["PASSWORD"]
+    youth.org_id = args["ORG_ID"]
     if not youth.get_cookie():
         return 0
     if not youth.course.update(youth.headers):
@@ -251,15 +256,17 @@ def main_cli(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--username', type=str)
-    parser.add_argument('--password', type=str)
-    parser.add_argument('--org_id', type=str)
-    parser.add_argument('--remote_config', type=str)
-    args = parser.parse_args()
-    if (args.remote_config):
-        main(args.remote_config)
-    elif (args.username and args.password and args.org_id):
-        main_cli(args)
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--username', type=str)
+    # parser.add_argument('--password', type=str)
+    # parser.add_argument('--org_id', type=str)
+    # parser.add_argument('--remote_config', type=str)
+    # args = parser.parse_args()
+    ENV={_i:os.getenv(_i) for _i in ['PASSWORD','USERNAME','ORG_ID','REMOTE_CONFIG']}
+    if (ENV['remote_config']):
+        main(ENV['remote_config'])
+    # elif (args.username and args.password and args.org_id):
+    elif(ENV['USERNAME'] and ENV['PASSWORD'] and ENV['ORG_ID']):
+        main_cli(ENV)
     else:
         main()

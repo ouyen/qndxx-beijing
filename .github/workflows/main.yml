@@ -25,6 +25,11 @@ jobs:
         run: pip install -r requirements.txt
         
       - name: 'Working'
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          ORG_ID: ${{secrets.ORG_ID}}
+          REMOTE_CONFIG: ${{secrets.REMOTE_CONFIG}}
         run: |
-          python main.py --username ${{secrets.USERNAME}} --password ${{secrets.PASSWORD}} --org_id ${{secrets.ORG_ID}}
+          python main.py
         
