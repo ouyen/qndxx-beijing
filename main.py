@@ -263,8 +263,8 @@ if __name__ == '__main__':
     # parser.add_argument('--remote_config', type=str)
     # args = parser.parse_args()
     ENV={_i:os.getenv(_i) for _i in ['PASSWORD','USERNAME','ORG_ID','REMOTE_CONFIG']}
-    if (ENV['remote_config']):
-        main(ENV['remote_config'])
+    if (ENV['REMOTE_CONFIG']):
+        main(ENV['REMOTE_CONFIG'])
     # elif (args.username and args.password and args.org_id):
     elif(ENV['USERNAME'] and ENV['PASSWORD'] and ENV['ORG_ID']):
         main_cli(ENV)
