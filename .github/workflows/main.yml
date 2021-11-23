@@ -26,5 +26,5 @@ jobs:
         
       - name: 'Working'
         run: |
-          python main.py --username ${{secrets.USERNAME}} --password ${{secrets.PASSWORD}} --org_id ${{secrets.ORG_ID}} --remote_config ${{secrets.REMOTE_CONFIG}}
+          python main.py --username ${{secrets.USERNAME}} --password ${{secrets.PASSWORD}} --org_id ${{secrets.ORG_ID}}
         
