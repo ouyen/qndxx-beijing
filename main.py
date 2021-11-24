@@ -5,6 +5,8 @@ import smtplib
 from base64 import b64encode
 from email.header import Header
 from email.mime.text import MIMEText
+import time
+import random
 
 import requests
 import yaml
@@ -233,6 +235,9 @@ def main(remote_config=''):
             course.need_update = False
         if not youth.study():
             continue
+        sleep_time=2+random.random()
+        print(f'[INFO] Sleep {sleep_time} s')
+        time.sleep(sleep_time)
     return 1
 
 
