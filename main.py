@@ -224,8 +224,10 @@ def main(remote_config=''):
             config_dict = yaml.safe_load(f)
     mailer = youth.mailer
     mailer.read_config(config_dict['Mailer'])
+    user_i=0
     for single_config in config_dict['youth']:
-        print(single_config['username'], 'Start')
+        print('[INFO] User ',user_i, ' Start')
+        user_i+=1
         youth.read_config(single_config)
         if not youth.get_cookie():
             continue
