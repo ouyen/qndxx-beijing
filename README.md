@@ -2,6 +2,7 @@
 
 ## Instructions
 
+dev test
 
 1. Install [python](https://www.python.org/) , ~~GeckoDriver,~~  run ``pip3 install -r requirements.txt`` to install requirements.
 2. Copy config.example.yaml to config.yaml. Edit config.yaml. (Enter this [website](https://m.bjyouth.net/site/login) to retrieve the account and password. Get your organization id [here](https://m.bjyouth.net/qndxx/index.html#/pages/home/my))
