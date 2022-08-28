@@ -42,6 +42,12 @@ jobs:
         run: |
           python main.py
 
+      - name: Converts Markdown to HTML
+        uses: jaywcjlove/markdown-to-html-cli@main
+        with:
+          source: html/index.md
+          output: html/index.html
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
