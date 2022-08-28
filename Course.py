@@ -59,7 +59,7 @@ class QNDXX_NEW_COURSE():
 ## 风险自负!!!
 
 '''
-        with open('html/index.md', 'w', encoding='utf-8') as f:
+        with open('html/readme.md', 'w', encoding='utf-8') as f:
             f.write(text)
         print('[INFO] Class html written success')
         return True
