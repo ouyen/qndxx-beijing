@@ -1,2 +1,5 @@
 .*
 config.yaml
+__pycache__
+html/*
+!html/.gitignore

@@ -2,14 +2,15 @@ import requests
 from ddddocr import DdddOcr
 import re
 from Encrypt import Encrypt
+from Course import QNDXX_NEW_COURSE
 
 class Youth():
-    def __init__(self,_course) -> None:
+    def __init__(self) -> None:
         self.cookies = ''
         self.username = ''
         self.password = ''
         self.get_cookies_turn = 5
-        self.course = _course
+        self.course = QNDXX_NEW_COURSE()
         self.ua = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x6303004c)"
         self.headers = {
             "Host": "m.bjyouth.net",
@@ -51,11 +52,13 @@ class Youth():
             cap.status_code
             ocr = DdddOcr()
             cap_text = ocr.classification(cap.content)
+
             print(f'[INFO] Captcha OCR: {cap_text}')
+            # print(S.cookies.get_dict())
             _csrf_mobile = S.cookies.get_dict()['_csrf_mobile']
             headers['Origin'] = "https://m.bjyouth.net"
-            login_username = self.encrypt(self.username)
-            login_password = self.encrypt(self.password)
+            login_username = self.encrypt.encrypt(self.username)
+            login_password = self.encrypt.encrypt(self.password)
             login_r = S.post('https://m.bjyouth.net/site/login',
                              headers=headers,
                              data={
@@ -102,9 +105,7 @@ class Youth():
                 )
                 return True
             print(f'[INFO] Study complete')
-            raw_message = f"{self.username} learned id={self.course.id} :\n{self.course.title[6:10] + '...'}\nend.jpg:\n{self.course.end_img_url}\nstudy url:\n{self.course.study_url % self.send_message_org_id}"
-            if self.email and self.mailer:
-                self.mailer.send_mail(self.email, raw_message)
+            raw_message = f"{self.username} learned id={self.course.id} :\n{self.course.title[6:10] + '...'}\nend.jpg:\n{self.course.end_img_url}\nstudy url:\n{self.course.study_url % '172442'}"
             self.send_message(raw_message)
             return 1
         except:

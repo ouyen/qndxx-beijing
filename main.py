@@ -1,7 +1,4 @@
-import imp
 import os
-
-
 
 
 import time
@@ -11,13 +8,7 @@ import requests
 import yaml
 
 
-
-
 from Youth import Youth
-
-
-
-
 
 
 def main(remote_config=''):
@@ -41,12 +32,11 @@ def main(remote_config=''):
     else:
         with open('config.yaml', 'r') as f:
             config_dict = yaml.safe_load(f)
-    mailer = youth.mailer
-    mailer.read_config(config_dict['Mailer'])
-    user_i=0
+
+    user_i = 0
     for single_config in config_dict['youth']:
-        print('[INFO] User ',user_i, ' Start')
-        user_i+=1
+        print('[INFO] User ', user_i, ' Start')
+        user_i += 1
         youth.read_config(single_config)
         if not youth.get_cookie():
             continue
@@ -56,7 +46,7 @@ def main(remote_config=''):
             course.need_update = False
         if not youth.study():
             continue
-        sleep_time=2+random.random()
+        sleep_time = 2+random.random()
         print(f'[INFO] Sleep {sleep_time} s')
         time.sleep(sleep_time)
     return 1
@@ -78,10 +68,11 @@ def main_cli(args):
 
 
 if __name__ == '__main__':
-    ENV={_i:os.getenv(_i) for _i in ['PASSWORD','USERNAME','ORG_ID','REMOTE_CONFIG']}
+    ENV = {_i: os.getenv(_i) for _i in [
+        'PASSWORD', 'USERNAME', 'ORG_ID', 'REMOTE_CONFIG']}
     if (ENV['REMOTE_CONFIG']):
         main(ENV['REMOTE_CONFIG'])
-    elif(ENV['USERNAME'] and ENV['PASSWORD'] and ENV['ORG_ID']):
+    elif (ENV['USERNAME'] and ENV['PASSWORD'] and ENV['ORG_ID']):
         main_cli(ENV)
     else:
         main()
