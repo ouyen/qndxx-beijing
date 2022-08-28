@@ -4,6 +4,8 @@ on:
   schedule:
     # Run at 8:00 on every Tuesday.
     - cron: '0 0  * * 2'
+
+  push:
     
   workflow_dispatch:
 
@@ -40,14 +42,9 @@ jobs:
         run: |
           python main.py
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          # Upload entire repository
-          path: './html'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
         
