@@ -9,8 +9,8 @@
 (以下为可选项)
 
 + 点击这个链接, 可以查看学习记录: https://m.bjyouth.net/qndxx/index.html#/pages/home/studyrecord
-
-+ 点击这个链接, 可以查看学习成功的截图: https://h5.cyol.com/special/daxuexi/dqf9nk0c5w/images/end.jpg
++ 点击这个链接, 可以查看学习成功的截图: https://ouyen.github.io/qndxx-beijing/end.html
++ 点击这个链接, 可以查看学习成功所显示的图片: https://h5.cyol.com/special/daxuexi/dqf9nk0c5w/images/end.jpg
 
 ## 本期课程信息
 
