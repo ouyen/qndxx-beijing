@@ -27,6 +27,7 @@ class QNDXX_NEW_COURSE():
             self.url=self.url[:i]
             self.end_img_url = self.url+ '/images/end.jpg'
             self.study_url = f"https://m.bjyouth.net/dxx/check?id={self.id}&org_id=%s"
+            # self.download_img_success=self.download_img()
 
             self.write_html()
             print('[INFO] Class updated success')
@@ -34,6 +35,18 @@ class QNDXX_NEW_COURSE():
         except:
             print('[ERROR] Class update failed')
             return 0
+
+    def download_img(self):
+        try:
+            r = requests.get(self.end_img_url, timeout=5)
+            r.status_code
+            with open('html/end.jpg', 'wb') as f:
+                f.write(r.content)
+            print('[INFO] Class img downloaded success')
+            return True
+        except:
+            print('[ERROR] Class img download failed')
+            return False
 
     def write_html(self):
         text = f'''# 青年大学习(北京)
@@ -47,8 +60,8 @@ class QNDXX_NEW_COURSE():
 (以下为可选项)
 
 + 点击这个链接, 可以查看学习记录: https://m.bjyouth.net/qndxx/index.html#/pages/home/studyrecord
-
-+ 点击这个链接, 可以查看学习成功的截图: {self.end_img_url}
++ 点击这个链接, 可以查看学习成功的截图: https://ouyen.github.io/qndxx-beijing/end.html
++ 点击这个链接, 可以查看学习成功所显示的图片: {self.end_img_url}
 
 ## 本期课程信息
 
@@ -61,5 +74,20 @@ class QNDXX_NEW_COURSE():
 '''
         with open('html/index.md', 'w', encoding='utf-8') as f:
             f.write(text)
+
+        with open('html/end.html', 'w', encoding='utf-8') as f:
+            f.write(f'''<!DOCTYPE html>
+
+<html>
+    <meta name="referrer" content="never">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>团课详情</title>
+    <style>
+    
+    </style>
+    <img style="position:absolute;left:0px;top:0px;width:100%;height:100%" id="main-img" onerror="onImageLoadError();" src="{self.end_img_url}" referrerpolicy="no-referrer" />
+
+</html>''')
         print('[INFO] Class html written success')
         return True
