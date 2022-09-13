@@ -53,7 +53,6 @@ jobs:
 
       - name: CNAME
         runs: |
-          touch ./html/CNAME
           echo 'qndxx.tk' > ./html/CNAME
 
       - name: Deploy
