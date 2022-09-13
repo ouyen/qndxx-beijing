@@ -51,19 +51,24 @@ jobs:
           source: html/index.md
           output: html/index.html
 
-      # - name: Deploy
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./html
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: CNAME
+        runs: |
+          touch ./html/CNAME
+          echo 'qndxx.tk' > ./html/CNAME
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          # Upload entire repository
-          path: './html'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v2
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v1
+      #   with:
+      #     # Upload entire repository
+      #     path: './html'
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v1
         
