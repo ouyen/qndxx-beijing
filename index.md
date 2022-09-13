@@ -1,3 +1,4 @@
+<meta name="referrer" content="no-referrer">
 # 青年大学习(北京)
 
 ## 使用方法
