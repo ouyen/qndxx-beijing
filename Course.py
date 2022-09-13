@@ -49,7 +49,8 @@ class QNDXX_NEW_COURSE():
             return False
 
     def write_html(self):
-        text = f'''# 青年大学习(北京)
+        text = f'''<meta name="referrer" content="no-referrer">
+# 青年大学习(北京)
 
 ## 使用方法
 
