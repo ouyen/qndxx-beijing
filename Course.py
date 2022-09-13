@@ -71,6 +71,10 @@ class QNDXX_NEW_COURSE():
 
 ## 风险自负!!!
 
+## star me:
+
+https://github.com/ouyen/qndxx-beijing/
+
 '''
         with open('html/index.md', 'w', encoding='utf-8') as f:
             f.write(text)
