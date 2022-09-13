@@ -52,7 +52,7 @@ jobs:
           output: html/index.html
 
       - name: CNAME
-        runs: |
+        run: |
           echo 'qndxx.tk' > ./html/CNAME
 
       - name: Deploy
