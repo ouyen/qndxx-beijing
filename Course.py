@@ -49,7 +49,10 @@ class QNDXX_NEW_COURSE():
             return False
 
     def write_html(self):
-        text = f'''# 青年大学习(北京)
+        text = f'''
+# 以下已失效
+    
+# 青年大学习(北京)
 
 ## 使用方法
 

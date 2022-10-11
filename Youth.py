@@ -96,8 +96,10 @@ class Youth():
 
     def study(self):
         try:
-            study_url = self.course.study_url % self.org_id
-            r = requests.get(url=study_url, headers=self.headers, timeout=5)
+            # study_url = self.course.study_url % self.org_id
+            # r = requests.get(url=study_url, headers=self.headers, timeout=5)
+            data= {"id":self.course.id,"org_id":self.org_id}
+            r = requests.post(url="https://m.bjyouth.net/dxx/check",headers=self.headers, timeout=5,json=data)
             r.status_code
             if r.text:
                 print(
