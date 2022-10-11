@@ -1,5 +1,7 @@
 <meta name="referrer" content="no-referrer">
         
+# 以下已失效
+
 # 青年大学习(北京)
 
 ## 使用方法
