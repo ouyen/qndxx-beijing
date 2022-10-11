@@ -49,9 +49,10 @@ class QNDXX_NEW_COURSE():
             return False
 
     def write_html(self):
-        text = f'''
+        text = f'''<meta name="referrer" content="no-referrer">
+        
 # 以下已失效
-    
+
 # 青年大学习(北京)
 
 ## 使用方法
@@ -73,6 +74,10 @@ class QNDXX_NEW_COURSE():
 学习的地址为: {self.url+"/m.html"}
 
 ## 风险自负!!!
+
+## star me:
+
+https://github.com/ouyen/qndxx-beijing/
 
 '''
         with open('html/index.md', 'w', encoding='utf-8') as f:
