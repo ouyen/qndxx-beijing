@@ -53,6 +53,10 @@ class Youth():
             ocr = DdddOcr()
             cap_text = ocr.classification(cap.content)
 
+            # save captcha
+            # with open('cap.jpg', 'wb') as f:
+            #     f.write(cap.content)
+
             print(f'[INFO] Captcha OCR: {cap_text}')
             # print(S.cookies.get_dict())
             _csrf_mobile = S.cookies.get_dict()['_csrf_mobile']
@@ -103,7 +107,7 @@ class Youth():
             r.status_code
             if r.text:
                 print(
-                    f'[ERROR] The url{study_url} maybe not correct or the website changed'
+                    f'[ERROR] The url{self.study_url} maybe not correct or the website changed'
                 )
                 return True
             print(f'[INFO] Study complete')
